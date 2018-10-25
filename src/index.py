@@ -1,20 +1,26 @@
+import os
 import telegram
-bot = telegram.Bot(token='687822837:AAEkrCh6WmnIrTA_3mZuqkbY-U8gnCYnGMc')
-from telegram.ext import Updater
-updater = Updater(token='687822837:AAEkrCh6WmnIrTA_3mZuqkbY-U8gnCYnGMc')
 import polyglot
+from telegram.ext import Updater
 from polyglot.text import Text, Word
-
-dispatcher = updater.dispatcher
+from dotenv import load_dotenv
+from polyglot.downloader import downloader
+downloader.download("sentiment2.ru")
 
 import logging
+load_dotenv()
+bot = telegram.Bot(token=os.getenv("BOT_TOKEN"))
+updater = Updater(token=os.getenv("BOT_TOKEN"))
+
+dispatcher = updater.dispatcher
+from telegram.ext import CommandHandler
+
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level=logging.INFO)
 def start(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text="I'm a bot, please talk to me!")
 
 
-from telegram.ext import CommandHandler
 start_handler = CommandHandler('start', start)
 dispatcher.add_handler(start_handler)
 
@@ -25,8 +31,12 @@ def set_message(bot, update, chat_data):
     bot.send_message(chat_id=update.message.chat_id, text='р')
 def echo(bot, update, chat_data):
     print(update)
-    text = Text(update.message.text)
-    print("Language Detected: Code={}, Name={}\n".format(text.language.code, text.language.name))
+    text = Text(update.message.text, hint_language_code="ru")
+
+    # print("Polarity {0}\n".format(text.polarity))
+    print("{:<16}{}".format("Word", "Polarity") + "\n" + "-" * 30)
+    for w in text.words:
+        print("{:<16}{:>2}".format(w, w.polarity))
     bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
 
 from telegram.ext import MessageHandler, Filters

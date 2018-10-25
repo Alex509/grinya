@@ -1,4 +1,8 @@
 python-telegram-bot
-polyglot
+cffi
 numpy
+polyglot
 pyicu
+pycld2
+morfessor
+python-dotenv

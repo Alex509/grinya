@@ -2,16 +2,15 @@ version: '3'
 services:
   web:
     build: .
-    depends_on:
-      - db-mongo
+#    depends_on:
+#      - db-mongo
     volumes:
       - .:/usr/src/app
     ports:
       - "8001:8001"
-    environment:
-      DATABASE_URL: postgres://todoapp@postgres/todos
-  db-mongo:
-    image: mongo:4.0.3-xenial
-    container_name: db-mongo
-    ports:
-      - "27017:27017"
+
+#  db-mongo:
+#    image: mongo:4.0.3-xenial
+#    container_name: db-mongo
+#    ports:
+#      - "27017:27017"
